@@ -115,7 +115,7 @@ def train(args, model, train_features, dev_features, test_features):
                                             args.upper_temperature,
                                             args.loss_tradeoff]]))
                         _path = os.path.join('../../output/results', _path + '.json')
-                        dump_json({'dev_f1': dev_score, 'test_f1': test_score}, _path)
+                        # dump_json({'dev_f1': dev_score, 'test_f1': test_score}, _path)
                         # if args.save_test_pred != "":
                         #     pred = report(args, model, test_features)
                         #     with open(args.save_test_pred, "w") as fh:
