@@ -1,9 +1,10 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from opt_einsum import contract
+# from opt_einsum import contract
 from long_seq import process_long_input
 from losses import ATLoss
+contract = torch.einsum
 
 
 class DocREModel(nn.Module):

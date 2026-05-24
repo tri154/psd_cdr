@@ -1,9 +1,4 @@
-numpy==1.19.5
-opt_einsum==3.3.0
-overrides==3.1.0
-pandas==1.1.4
-tqdm==4.62.3
-transformers==4.10.0
+pandas
+tqdm
 ujson==4.0.2
-scikit-learn
-tensorboardX
+transformers==4.57.3

@@ -9,13 +9,13 @@ import torch.nn.functional as F
 import ujson as json
 from torch.utils.data import DataLoader
 from transformers import AutoConfig, AutoModel, AutoTokenizer
-from transformers.optimization import AdamW, get_linear_schedule_with_warmup
+from transformers.optimization import get_linear_schedule_with_warmup
+from torch.optim import AdamW
 from model import DocREModel
 from utils import set_seed, collate_fn, add_logits_to_features
 from prepro import read_docred, read_cdr
 from evaluation import to_official, official_evaluate
 from niceutils import *
-from tensorboardX import SummaryWriter
 
 
 def print_features(features):
@@ -86,8 +86,8 @@ def train(args, model, train_features, dev_features, test_features):
                     loss1, loss2 = outputs[1], outputs[2]
                     loss1.detach().cpu().numpy()
                     loss2.detach().cpu().numpy()
-                    writer.add_scalar("re_loss", loss1, global_step=num_steps)
-                    writer.add_scalar("kd_loss", loss2, global_step=num_steps)
+                    # writer.add_scalar("re_loss", loss1, global_step=num_steps)
+                    # writer.add_scalar("kd_loss", loss2, global_step=num_steps)
                     num_steps += 1
 
                 if (step + 1) == len(train_dataloader) - 1 or (args.evaluation_steps > 0 and num_steps % args.evaluation_steps == 0 and step % args.gradient_accumulation_steps == 0):
@@ -136,7 +136,7 @@ def train(args, model, train_features, dev_features, test_features):
                        args.loss_tradeoff]]))
     _path = os.path.join('../../output', _path)
     nice_makedir(_path)
-    writer = SummaryWriter(_path)
+    # writer = SummaryWriter(_path)
 
 
     new_layer = ["extractor", "bilinear"]
@@ -300,7 +300,8 @@ def main():
 
     set_seed(args)
     model = DocREModel(config, model, num_labels=args.num_labels, lower_temperature=args.lower_temperature, upper_temperature=args.upper_temperature, loss_tradeoff=args.loss_tradeoff)
-    model.to(0)
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    model.to(device)
 
     if args.mode == "train":  # Training
         train(args, model, train_features, dev_features, test_features)

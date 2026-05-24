@@ -6,12 +6,12 @@ run() {
     U_TEMPERATURE=$3
     TRADEOFF=$4
     SEED=$5
-    CUDA_VISIBLE_DEVICES=0 python ./kd_atlop_v2_2_cdr/run_kd_atlop.py \
+    CUDA_VISIBLE_DEVICES=0 python ./run_kd_atlop.py \
         --debug 0 \
         --mode train \
-        --root_path ./kd_atlop_v2_2_cdr \
+        --root_path ./ \
         --transformer_type bert \
-        --model_name_or_path ../model/gaojie/scibert \
+        --model_name_or_path allenai/scibert_scivocab_uncased \
         --data_dir ./dataset/cdr \
         --train_file train_filter.data \
         --dev_file dev_filter.data \
